@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class MonoNomial {
+public class Monomial {
     private double coeff;
     private int power;
     ArrayList<String> mono = new ArrayList<>();
@@ -9,25 +8,23 @@ public class MonoNomial {
     ArrayList<Integer> degList = new ArrayList<>();
 
 
-    public void slicing(String s) {
-        String[] line = s.split("x~");
-        this.setCoeff(Double.parseDouble(line[0]));
-        System.out.println(getCoeff());
-        try {
-            this.setPower(Integer.parseInt(line[1]));
-            System.out.println(getPower());
-        } catch (Exception ignored){
-        }
+
+
+    public Monomial multiply(Monomial m){
+        Monomial newM = new Monomial();
+        newM.setPower(this.getPower() + m.getPower());
+        newM.setCoeff(this.getCoeff() * m.getCoeff());
+        return newM;
     }
 
 
 
-    public MonoNomial(double coeff, int power) {
+    public Monomial(double coeff, int power) {
         this.coeff = coeff;
         this.power = power;
     }
 
-    public MonoNomial() {
+    public Monomial() {
     }
 
     public double getCoeff() {
