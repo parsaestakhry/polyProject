@@ -107,6 +107,22 @@ public class PolyNomial extends Monomial{
     }
 
     public PolyNomial sum(PolyNomial p){
+        list_res_c.clear();
+        list_res_p.clear();
+        for (int i = 0; i < this.powerList.size(); i++) {
+            for (int j = 0; j < p.powerList.size(); j++) {
+                if (this.powerList.get(i) == p.powerList.get(j)){
+                    list_res_c.add(this.coeffList.get(i) + p.coeffList.get(j));
+                    list_res_p.add(this.powerList.get(i));
+
+                } else {
+
+                }
+            }
+        }
+
+        System.out.println(list_res_c);
+        System.out.println(list_res_p);
         return this;
     }
 
