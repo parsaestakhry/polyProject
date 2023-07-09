@@ -1,10 +1,13 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PolyNomial extends Monomial{
     // array lists
     ArrayList<String> poly = new ArrayList<>();
-    ArrayList<String> operators = new ArrayList<>();
     ArrayList<Integer> powerList = new ArrayList<>();
     ArrayList<Double> coeffList = new ArrayList<>();
     ArrayList<Double> list_res_c = new ArrayList<>();
@@ -17,10 +20,21 @@ public class PolyNomial extends Monomial{
     // main constructor
     public PolyNomial(String polynomial){
         // replacing all the parts
-        polynomial = polynomial.replaceAll("\\s" , "");
+//        polynomial = polynomial.replaceAll("\\s" , "");
         polynomial = polynomial.replace("^" , "~");
-        String[] polyParts = polynomial.split("[+-]");
-        poly.addAll(Arrays.asList(polyParts));
+
+        String regexPattern = "[0-9xX\\^+-][^\\s]*";
+
+        Pattern pattern = Pattern.compile(regexPattern);
+        Matcher matcher = pattern.matcher(polynomial);
+        while (matcher.find()){
+            String match = matcher.group();
+            System.out.println("Print matches");
+            System.out.println(match);
+            poly.add(match);
+        }
+
+
     }
 
     // method to
@@ -60,8 +74,12 @@ public class PolyNomial extends Monomial{
                 m.setPower(0);
             }
             p.powerList.add(m.getPower());
-
         }
+        System.out.println("Range of properties");
+        System.out.println(this.powerList);
+        System.out.println(p.powerList);
+        System.out.println(this.coeffList);
+        System.out.println(p.coeffList);
 
 
     }
@@ -76,14 +94,15 @@ public class PolyNomial extends Monomial{
             for (int j = 0; j < p.coeffList.size(); j++) {
                 list_res_c.add(this.coeffList.get(i) * p.coeffList.get(j));
                 list_res_p.add(this.powerList.get(i) + p.powerList.get(j));
+
             }
         }
 //        System.out.println(this.powerList);
 //        System.out.println(this.coeffList);
 //        System.out.println(p.powerList);
 //        System.out.println(p.coeffList);
-//        System.out.println(list_res_c);
-//        System.out.println(list_res_p);
+        System.out.println(list_res_c);
+        System.out.println(list_res_p);
         return this;
     }
 
@@ -109,43 +128,117 @@ public class PolyNomial extends Monomial{
     public PolyNomial sum(PolyNomial p){
         list_res_c.clear();
         list_res_p.clear();
-        for (int i = 0; i < this.powerList.size(); i++) {
-            for (int j = 0; j < p.powerList.size(); j++) {
-                if (this.powerList.get(i) == p.powerList.get(j)){
-                    list_res_c.add(this.coeffList.get(i) + p.coeffList.get(j));
-                    list_res_p.add(this.powerList.get(i));
 
-                } else {
+        ArrayList<Double> merged_coeff = new ArrayList<>();
+        ArrayList<Integer> merged_power = new ArrayList<>();
 
+        for (int i = 0; i < this.coeffList.size(); i++) {
+            for (int j = 0; j < p.coeffList.size() ; j++) {
+                if (Objects.equals(p.powerList.get(j), this.powerList.get(i))){
+                    merged_power.add(p.powerList.get(j));
+                    merged_coeff.add(this.coeffList.get(i) + p.coeffList.get(j));
                 }
             }
         }
 
+        for (int i = 0; i < this.coeffList.size(); i++) {
+            if (!merged_power.contains(this.powerList.get(i))){
+                list_res_c.add(this.coeffList.get(i));
+                list_res_p.add(this.powerList.get(i));
+            }
+        }
+
+        for (int i = 0; i < p.coeffList.size(); i++) {
+            if (!merged_power.contains(p.powerList.get(i))){
+                list_res_c.add(p.coeffList.get(i));
+                list_res_p.add(p.powerList.get(i));
+            }
+        }
+
+        list_res_c.addAll(merged_coeff);
+        list_res_p.addAll(merged_power);
+
+        System.out.println("list of final coeffs after sum");
         System.out.println(list_res_c);
+        System.out.println("list of final powers after sum ");
         System.out.println(list_res_p);
+//        System.out.println("list of the given powers after change");
+//        System.out.println(p.powerList);
+//        System.out.println(this.powerList);
+//        System.out.println("list of the given coeffs after change");
+//        System.out.println(p.coeffList);
+//        System.out.println(this.coeffList);
+
         return this;
     }
 
     public PolyNomial subtract(PolyNomial p){
-        return this;
+        list_res_c.clear();
+        list_res_p.clear();
 
+        ArrayList<Double> merged_coeff = new ArrayList<>();
+        ArrayList<Integer> merged_power = new ArrayList<>();
+
+        for (int i = 0; i < this.coeffList.size(); i++) {
+            for (int j = 0; j < p.coeffList.size() ; j++) {
+                if (Objects.equals(p.powerList.get(j), this.powerList.get(i))){
+                    merged_power.add(p.powerList.get(j));
+                    merged_coeff.add(this.coeffList.get(i) - p.coeffList.get(j));
+                }
+            }
+        }
+
+        for (int i = 0; i < this.coeffList.size(); i++) {
+            if (!merged_power.contains(this.powerList.get(i))){
+                list_res_c.add(this.coeffList.get(i));
+                list_res_p.add(this.powerList.get(i));
+            }
+        }
+
+        for (int i = 0; i < p.coeffList.size(); i++) {
+            if (!merged_power.contains(p.powerList.get(i))){
+                list_res_c.add(p.coeffList.get(i));
+                list_res_p.add(p.powerList.get(i));
+            }
+        }
+
+        list_res_c.addAll(merged_coeff);
+        list_res_p.addAll(merged_power);
+
+        System.out.println("list of final coeffs after sum");
+        System.out.println(list_res_c);
+        System.out.println("list of final powers after sum ");
+        System.out.println(list_res_p);
+        return this;
     }
 
     public PolyNomial derivative(){
+
         return this;
     }
 
     public double evaluate(double x){
-        return 0.0;
+        double sum = 0;
+        for (int i = 0; i < this.powerList.size() ; i++) {
+            sum = sum + (Math.pow(x , this.powerList.get(i))) * this.coeffList.get(i);
+        }
+        return sum;
     }
 
     public PolyNomial sortByDegree(){
+        Collections.sort(this.powerList);
         return this;
     }
 
     public String toString(){
-        return "";
+        String res = "";
+        for (int i = 0; i < poly.size(); i++) {
+            if (i == poly.size() - 1) res = res + poly.get(i);
+            else res = res + poly.get(i) + " + ";
+        }
+        return res;
     }
-
-
 }
+
+
+
