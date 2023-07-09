@@ -29,8 +29,6 @@ public class PolyNomial extends Monomial{
         Matcher matcher = pattern.matcher(polynomial);
         while (matcher.find()){
             String match = matcher.group();
-            System.out.println("Print matches");
-            System.out.println(match);
             poly.add(match);
         }
 
@@ -75,12 +73,11 @@ public class PolyNomial extends Monomial{
             }
             p.powerList.add(m.getPower());
         }
-        System.out.println("Range of properties");
-        System.out.println(this.powerList);
-        System.out.println(p.powerList);
-        System.out.println(this.coeffList);
-        System.out.println(p.coeffList);
-
+ //       System.out.println("Range of properties");
+//        System.out.println(this.powerList);
+//        System.out.println(p.powerList);
+//        System.out.println(this.coeffList);
+//        System.out.println(p.coeffList);
 
     }
 
@@ -101,8 +98,8 @@ public class PolyNomial extends Monomial{
 //        System.out.println(this.coeffList);
 //        System.out.println(p.powerList);
 //        System.out.println(p.coeffList);
-        System.out.println(list_res_c);
-        System.out.println(list_res_p);
+//        System.out.println(list_res_c);
+//        System.out.println(list_res_p);
         return this;
     }
 
@@ -119,9 +116,9 @@ public class PolyNomial extends Monomial{
                 list_res_p.add(this.powerList.get(i) - p.powerList.get(j));
             }
         }
-
-        System.out.println(list_res_c);
-        System.out.println(list_res_p);
+//
+//        System.out.println(list_res_c);
+//        System.out.println(list_res_p);
         return this;
     }
 
@@ -158,10 +155,10 @@ public class PolyNomial extends Monomial{
         list_res_c.addAll(merged_coeff);
         list_res_p.addAll(merged_power);
 
-        System.out.println("list of final coeffs after sum");
-        System.out.println(list_res_c);
-        System.out.println("list of final powers after sum ");
-        System.out.println(list_res_p);
+//        System.out.println("list of final coeffs after sum");
+//        System.out.println(list_res_c);
+//        System.out.println("list of final powers after sum ");
+//        System.out.println(list_res_p);
 //        System.out.println("list of the given powers after change");
 //        System.out.println(p.powerList);
 //        System.out.println(this.powerList);
@@ -205,19 +202,35 @@ public class PolyNomial extends Monomial{
         list_res_c.addAll(merged_coeff);
         list_res_p.addAll(merged_power);
 
-        System.out.println("list of final coeffs after sum");
-        System.out.println(list_res_c);
-        System.out.println("list of final powers after sum ");
-        System.out.println(list_res_p);
+//        System.out.println("list of final coeffs after sum");
+//        System.out.println(list_res_c);
+//        System.out.println("list of final powers after sum ");
+//        System.out.println(list_res_p);
         return this;
     }
 
     public PolyNomial derivative(){
+        list_res_c.clear();
+        list_res_p.clear();
 
+        ArrayList<Double> new_coeff = new ArrayList<>();
+        ArrayList<Integer> new_power = new ArrayList<>();
+        for (int i = 0; i < this.powerList.size(); i++) {
+            double coeff = this.powerList.get(i) * this.coeffList.get(i);
+            new_coeff.add(coeff);
+            int power = this.powerList.get(i) - 1;
+            if (power > 0){
+                new_power.add(power);
+            }
+
+        }
+        list_res_c.addAll(new_coeff);
+        list_res_p.addAll(new_power);
         return this;
     }
 
     public double evaluate(double x){
+
         double sum = 0;
         for (int i = 0; i < this.powerList.size() ; i++) {
             sum = sum + (Math.pow(x , this.powerList.get(i))) * this.coeffList.get(i);
@@ -230,14 +243,20 @@ public class PolyNomial extends Monomial{
         return this;
     }
 
-    public String toString(){
-        String res = "";
-        for (int i = 0; i < poly.size(); i++) {
-            if (i == poly.size() - 1) res = res + poly.get(i);
-            else res = res + poly.get(i) + " + ";
+    public PolyNomial print(){
+        String printed = "";
+        for (int i = 0; i < list_res_c.size() ; i++) {
+            if (list_res_c.get(i) >=0){
+                printed = printed + "+"+ list_res_c.get(i).toString()+"x^"+list_res_p.get(i).toString()+ "";
+            }
+            else{
+                printed = printed + list_res_c.get(i).toString()+"x^"+list_res_p.get(i).toString()+ "";
+            }
         }
-        return res;
+        System.out.println(printed);
+        return this;
     }
+
 }
 
 
