@@ -280,6 +280,11 @@ public class PolyNomial extends Monomial{
         return this;
     }
 
+    public PolyNomial sort(){
+
+        return this;
+    }
+
 }
 
 
