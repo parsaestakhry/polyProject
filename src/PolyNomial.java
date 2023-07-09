@@ -213,6 +213,27 @@ public class PolyNomial extends Monomial{
         list_res_c.clear();
         list_res_p.clear();
 
+
+        powerList.clear();
+        coeffList.clear();
+        // looping through
+        for (String s : this.poly){
+            String[] parts = s.split("x~");
+            try {
+                this.setCoeff(Double.parseDouble(parts[0]));
+            } catch (Exception e){
+                this.setCoeff(1.0);
+            }
+            this.coeffList.add(this.getCoeff());
+            try {
+                this.setPower(Integer.parseInt(parts[1]));
+            } catch (Exception e){
+                this.setPower(0);
+            }
+            this.powerList.add(this.getPower());
+        }
+
+
         ArrayList<Double> new_coeff = new ArrayList<>();
         ArrayList<Integer> new_power = new ArrayList<>();
         for (int i = 0; i < this.powerList.size(); i++) {
@@ -224,6 +245,7 @@ public class PolyNomial extends Monomial{
             }
 
         }
+
         list_res_c.addAll(new_coeff);
         list_res_p.addAll(new_power);
         return this;
@@ -245,7 +267,7 @@ public class PolyNomial extends Monomial{
 
     public PolyNomial print(){
         String printed = "";
-        for (int i = 0; i < list_res_c.size() ; i++) {
+        for (int i = 0; i < list_res_p.size() ; i++) {
             if (list_res_c.get(i) >=0){
                 printed = printed + "+"+ list_res_c.get(i).toString()+"x^"+list_res_p.get(i).toString()+ "";
             }
@@ -253,6 +275,7 @@ public class PolyNomial extends Monomial{
                 printed = printed + list_res_c.get(i).toString()+"x^"+list_res_p.get(i).toString()+ "";
             }
         }
+
         System.out.println(printed);
         return this;
     }
